@@ -1,0 +1,3 @@
+{
+  "python.defaultInterpreterPath": "${userHome}/venv/MNIST/bin/python"
+}
