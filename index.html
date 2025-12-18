@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<body>
+  <h2>Digit Recognizer</h2>
+
+  <input type="file" id="fileInput" />
+  <button onclick="upload()">Upload & Predict</button>
+
+  <h3 id="status"></h3>
+
+  <script>
+    async function upload() {
+      const status = document.getElementById("status");
+      const file = document.getElementById("fileInput").files[0];
+
+      if (!file) {
+        status.innerText = "❌ Please select an image.";
+        return;
+      }
+
+      status.innerText = "⏳ Predicting...";
+
+      const form = new FormData();
+      form.append("file", file);
+
+      try {
+        const res = await fetch("http://localhost:8000/predict", {
+          method: "POST",
+          body: form
+        });
+
+        if (!res.ok) {
+          throw new Error("Server returned an error");
+        }
+
+        const data = await res.json();
+        status.innerText = "✅ Prediction: " + data.prediction;
+
+      } catch (err) {
+        status.innerText = "❌ Failed to predict. " +
+                           "Check backend or try again.";
+      }
+    }
+  </script>
+</body>
+</html>
